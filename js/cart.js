@@ -179,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Regex pour les noms (autorise lettres, espaces, apostrophes et accents)
     const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
 
+    const isValid = true;
     // Regex pour l'e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -186,26 +187,31 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!nameRegex.test(firstName)) {
       document.getElementById("firstNameErrorMsg").textContent =
         "Veuillez saisir un prénom valide.";
+        isValid = false;
     }
 
     if (!nameRegex.test(lastName)) {
       document.getElementById("lastNameErrorMsg").textContent =
         "Veuillez saisir un nom valide.";
+        isValid =false;
     }
 
     if (address === "") {
       document.getElementById("addressErrorMsg").textContent =
         "Veuillez saisir votre adresse.";
+        isValid = false;
     }
 
     if (!nameRegex.test(city)) {
       document.getElementById("cityErrorMsg").textContent =
         "Veuillez saisir une ville valide.";
+        isValid = false;
     }
 
     if (!emailRegex.test(email)) {
       document.getElementById("emailErrorMsg").textContent =
         "Veuillez saisir une adresse e-mail valide.";
+        isValid = false;
     }
 
     // Si toutes les données sont valides, effectuez la redirection vers la page de confirmation
@@ -260,7 +266,10 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         console.log("Réponse de la requête POST :", data);
-        window.location.href = "confirmation.html?id=" + data.orderId;
+        if(isValid){
+          window.location.href = "confirmation.html?id=" + data.orderId;
+        }
+      
       })
       .catch((error) => {
         console.error("Erreur lors de la requête POST :", error);
@@ -272,5 +281,6 @@ getArticles();
 
 
 //Même avec des erreurs dans le formulaire effectue quand même la redirection vers la page confirmatiion
+
 //J'ai la possibilité de mettre plus de 100 articles en passant directement par le panier
 //Je ne retrouve plus tout mes commits que j'ai fait

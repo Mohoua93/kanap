@@ -104,38 +104,35 @@ function getSum(productLocalStorage, data) {
 }
 
 function modifTotalprice(productLocalStorage, data) {
-  
   // Gestionnaire d'événements pour la modification de la quantité
   const quantityInputs = document.querySelectorAll(".itemQuantity");
   quantityInputs.forEach((input) => {
     input.addEventListener("change", function (event) {
       event.preventDefault();
 
-      if (event.target.value >= 0 && event.target.value <= 100)
-      {
+      if (event.target.value >= 0 && event.target.value <= 100) {
+        const newQuantity = parseInt(event.target.value);
+        const parentArticle = event.target.closest(".cart__item");
+        const productId = parentArticle.dataset.id;
+        const productColor = parentArticle.dataset.color;
 
-      
-      const newQuantity = parseInt(event.target.value);
-      const parentArticle = event.target.closest(".cart__item");
-      const productId = parentArticle.dataset.id;
-      const productColor = parentArticle.dataset.color;
+        // Mettre à jour la quantité dans productLocalStorage
+        const productIndex = productLocalStorage.findIndex(
+          (p) => p.id === productId && p.colors === productColor
+        );
+        if (productIndex !== -1) {
+          productLocalStorage[productIndex].quantity = newQuantity;
+          localStorage.setItem(
+            "addToCart",
+            JSON.stringify(productLocalStorage)
+          );
+        }
 
-      // Mettre à jour la quantité dans productLocalStorage
-      const productIndex = productLocalStorage.findIndex(
-        (p) => p.id === productId && p.colors === productColor
-      );
-      if (productIndex !== -1) {
-        productLocalStorage[productIndex].quantity = newQuantity;
-        localStorage.setItem("addToCart", JSON.stringify(productLocalStorage));
+        // Mettre à jour l'affichage du total
+        getSum(productLocalStorage, data);
+      } else {
+        alert("La quantité ne doit pas dépasser 100");
       }
-
-      // Mettre à jour l'affichage du total
-      getSum(productLocalStorage, data);
-    }
-    else 
-    {
-      alert('La quantité ne doit pas dépasser 100')
-    }
     });
   });
 
@@ -178,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Empêche l'envoi du formulaire par défaut
   form.addEventListener("submit", function (event) {
-    event.preventDefault(); 
+    event.preventDefault();
 
     const firstName = document.getElementById("firstName").value;
     const lastName = document.getElementById("lastName").value;
@@ -197,31 +194,31 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!nameRegex.test(firstName)) {
       document.getElementById("firstNameErrorMsg").textContent =
         "Veuillez saisir un prénom valide.";
-        isValid = false;
+      isValid = false;
     }
 
     if (!nameRegex.test(lastName)) {
       document.getElementById("lastNameErrorMsg").textContent =
         "Veuillez saisir un nom valide.";
-        isValid =false;
+      isValid = false;
     }
 
     if (address === "") {
       document.getElementById("addressErrorMsg").textContent =
         "Veuillez saisir votre adresse.";
-        isValid = false;
+      isValid = false;
     }
 
     if (!nameRegex.test(city)) {
       document.getElementById("cityErrorMsg").textContent =
         "Veuillez saisir une ville valide.";
-        isValid = false;
+      isValid = false;
     }
 
     if (!emailRegex.test(email)) {
       document.getElementById("emailErrorMsg").textContent =
         "Veuillez saisir une adresse e-mail valide.";
-        isValid = false;
+      isValid = false;
     }
 
     // Si toutes les données sont valides, effectuez la redirection vers la page de confirmation
@@ -276,10 +273,9 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then((data) => {
         console.log("Réponse de la requête POST :", data);
-        if(isValid){
+        if (isValid) {
           window.location.href = "confirmation.html?id=" + data.orderId;
         }
-      
       })
       .catch((error) => {
         console.error("Erreur lors de la requête POST :", error);
@@ -288,9 +284,3 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 getArticles();
-
-
-//Même avec des erreurs dans le formulaire effectue quand même la redirection vers la page confirmatiion
-
-//J'ai la possibilité de mettre plus de 100 articles en passant directement par le panier
-//Je ne retrouve plus tout mes commits que j'ai fait

@@ -110,6 +110,11 @@ function modifTotalprice(productLocalStorage, data) {
   quantityInputs.forEach((input) => {
     input.addEventListener("change", function (event) {
       event.preventDefault();
+
+      if (event.target.value >= 0 && event.target.value <= 100)
+      {
+
+      
       const newQuantity = parseInt(event.target.value);
       const parentArticle = event.target.closest(".cart__item");
       const productId = parentArticle.dataset.id;
@@ -126,6 +131,11 @@ function modifTotalprice(productLocalStorage, data) {
 
       // Mettre à jour l'affichage du total
       getSum(productLocalStorage, data);
+    }
+    else 
+    {
+      alert('La quantité ne doit pas dépasser 100')
+    }
     });
   });
 

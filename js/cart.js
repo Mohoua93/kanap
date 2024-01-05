@@ -187,6 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
 
     const isValid = true;
+    
     // Regex pour l'e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
